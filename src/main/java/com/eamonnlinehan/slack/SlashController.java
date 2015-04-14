@@ -2,6 +2,8 @@ package com.eamonnlinehan.slack;
 
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,8 @@ public class SlashController {
 	@Value("${slack.token}")
 	private String slackToken;
 
-	@Autowired
+//	@Autowired
+	@Resource(name="jobBuildTokenMap")
 	private Map<String, String> jobBuildTokenMap;
 
 	@Autowired
