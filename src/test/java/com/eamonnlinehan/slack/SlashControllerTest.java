@@ -60,7 +60,7 @@ public class SlashControllerTest {
 
 		String response = template.postForObject(base.toString(), map, String.class);
 
-		assertThat(response, equalTo("Jenkins is building Platform TRUNK Compile Check"));
+		assertThat(response, equalTo("Jenkins building 94070"));
 	}
 
 }
