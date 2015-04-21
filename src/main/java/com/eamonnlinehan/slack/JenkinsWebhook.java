@@ -105,13 +105,15 @@ public class JenkinsWebhook {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	public int triggerJob(String jobName, String buildToken) {
+	// FIXME Comment
+	
+	public int triggerJob(JenkinsJob job) {
 
 		// Make sure job names get encoded correctly
 		URI uri;
 		try {
 			uri = new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(),
-					"/job/" + jobName + "/build", "token=" + buildToken, null);
+					"/job/" + job.getJobName() + "/build", job.getQueryString(), null);
 
 			HttpPost httpPost = new HttpPost(uri);
 
@@ -126,7 +128,7 @@ public class JenkinsWebhook {
 			return response.getStatusLine().getStatusCode();
 
 		} catch (URISyntaxException | IOException e) {
-			log.error("Failed to trigger job '" + jobName + "'", e);
+			log.error("Failed to trigger job '" + job.getJobName() + "'", e);
 			return HttpStatus.INTERNAL_SERVER_ERROR.value();
 		}
 

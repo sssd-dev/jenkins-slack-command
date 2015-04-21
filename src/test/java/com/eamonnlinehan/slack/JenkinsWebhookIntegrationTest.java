@@ -37,7 +37,9 @@ public class JenkinsWebhookIntegrationTest {
 		String jobName = jobBuildTokenMap.entrySet().iterator().next().getKey();
 		String buildToken = jobBuildTokenMap.get(jobName);
 
-		int status = jenkins.triggerJob(jobName, buildToken);
+		JenkinsJob job = new JenkinsJob(jobName, buildToken);
+		
+		int status = jenkins.triggerJob(job);
 
 		assertTrue(HttpStatus.OK.value() == status);
 

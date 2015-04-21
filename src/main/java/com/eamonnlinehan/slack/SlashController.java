@@ -1,9 +1,5 @@
 package com.eamonnlinehan.slack;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +27,11 @@ public class SlashController {
 	@Value("${slack.token}")
 	private String slackToken;
 
-//	@Autowired
-	@Resource(name="jobBuildTokenMap")
-	private Map<String, String> jobBuildTokenMap;
-
 	@Autowired
 	private JenkinsWebhook jenkins;
+
+	@Autowired
+	private SlashCommandParser commandParser;
 
 	/**
 	 * 
@@ -62,13 +57,15 @@ public class SlashController {
 		if (!slackToken.equals(token))
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 
-		// Check the job to build is one of the known jobs
-		if (!jobBuildTokenMap.containsKey(text))
-			return new ResponseEntity<String>("Jenkins job not recognised '" + text + "'", HttpStatus.BAD_REQUEST);
+		String buildCause = "Slash command '" + command + " " + text + "' on channel #" + channelName + " executed by "
+				+ userName + "@" + teamDomain;
 
-		int statusCode = jenkins.triggerJob(text, jobBuildTokenMap.get(text));
+		JenkinsJob job = commandParser.parse("");
+		job.setCause(buildCause);
 
-		return new ResponseEntity<String>("Jenkins is building " + text, HttpStatus.valueOf(statusCode));
+		int statusCode = jenkins.triggerJob(job);
+
+		return new ResponseEntity<String>("Jenkins building " + job.getJobName(), HttpStatus.valueOf(statusCode));
 	}
 
 }
