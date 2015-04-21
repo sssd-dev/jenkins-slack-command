@@ -60,7 +60,7 @@ public class SlashController {
 		String buildCause = "Slash command '" + command + " " + text + "' on channel #" + channelName + " executed by "
 				+ userName + "@" + teamDomain;
 
-		JenkinsJob job = commandParser.parse("");
+		JenkinsJob job = commandParser.parse(text);
 		job.setCause(buildCause);
 
 		int statusCode = jenkins.triggerJob(job);

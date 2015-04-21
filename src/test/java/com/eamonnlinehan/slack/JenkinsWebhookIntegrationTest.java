@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 import org.junit.Test;
@@ -26,16 +25,13 @@ public class JenkinsWebhookIntegrationTest {
 
 	@Autowired
 	private JenkinsWebhook jenkins;
-	
-	@Autowired
-	private Map<String, String> jobBuildTokenMap;
 
 	@Test
 	public void testKickOffBuild() throws ClientProtocolException, IOException, URISyntaxException {
 
 		// Get a valid job name and token from configuration
-		String jobName = jobBuildTokenMap.entrySet().iterator().next().getKey();
-		String buildToken = jobBuildTokenMap.get(jobName);
+		String jobName = "Platform TRUNK compile check";
+		String buildToken = "2aa5ef75-798e-4d91-8704-ced8b58d47c6";
 
 		JenkinsJob job = new JenkinsJob(jobName, buildToken);
 		
