@@ -60,6 +60,7 @@ public class SlashCommandParserTest {
 
 		assertTrue(job instanceof JenkinsReleaseJob);
 		assertNotNull(job.getJobName());
+		
 		assertNotNull(((JenkinsReleaseJob) job).getDevelopmentVersion());
 		
 		System.out.println(job);

@@ -57,15 +57,18 @@ public class SlashController {
 		if (!slackToken.equals(token))
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 
-		String buildCause = "Slash command '" + command + " " + text + "' on channel #" + channelName + " executed by "
+		String buildCause = "Slash command " + command + " " + text + " on channel #" + channelName + " executed by "
 				+ userName + "@" + teamDomain;
 
 		JenkinsJob job = commandParser.parse(text);
 		job.setCause(buildCause);
 
-		int statusCode = jenkins.triggerJob(job);
-
-		return new ResponseEntity<String>("Jenkins building " + job.getJobName(), HttpStatus.valueOf(statusCode));
+		HttpStatus status = jenkins.triggerJob(job);
+		
+		if (status.is2xxSuccessful())
+			return new ResponseEntity<String>("Jenkins building '" + job.getJobName() + "'", status);
+		else
+			return new ResponseEntity<String>("Failed to trigger Jenkins job '" + job.getJobName() + "'", status);
 	}
 
 }

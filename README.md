@@ -35,7 +35,7 @@ An application.properties file should be provided in the same directory as the e
 
 # TODO Items
 
- - Authentication of the jobs that may be triggered and the build tokens to be allowed trigger them needs to be externalised.
+ - The endpoint should be using SSL because private tokens are being exchanged.
  - It would be nice if it was possible to configure which Slack users had permission to trigger jobs. For example, a rule like only allow members of the #product-dev channel trigger releases.
 
 

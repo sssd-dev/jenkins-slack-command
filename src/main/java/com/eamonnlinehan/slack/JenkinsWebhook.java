@@ -14,7 +14,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -97,39 +96,36 @@ public class JenkinsWebhook {
 	}
 
 	/**
+	 * Sends the POST to Jenkins to trigger the job
 	 * 
-	 * @param jobName
-	 * @param buildToken
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws URISyntaxException
+	 * @param job
+	 *            a description of the job and its parameters
+	 * @return the response status from the Jenkins server
 	 */
-	// FIXME Comment
-	
-	public int triggerJob(JenkinsJob job) {
+	public HttpStatus triggerJob(JenkinsJob job) {
 
 		// Make sure job names get encoded correctly
-		URI uri;
+
 		try {
-			uri = new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(),
-					"/job/" + job.getJobName() + "/build", job.getQueryString(), null);
 
-			HttpPost httpPost = new HttpPost(uri);
+			String path = null;
+			if (job.isParameterized())
+				path = "/job/" + job.getJobName() + "/buildWithParameters";
+			else
+				path = "/job/" + job.getJobName() + "/build";
 
+			HttpPost httpPost = new HttpPost(new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(),
+					path, job.getQueryString(), null));
 			log.info(httpPost.getRequestLine());
 
-			HttpResponse response;
-
-			response = httpClient.execute(host, httpPost, localContext);
-
+			HttpResponse response = httpClient.execute(host, httpPost, localContext);
 			log.info(response.getStatusLine().toString());
 
-			return response.getStatusLine().getStatusCode();
+			return HttpStatus.valueOf(response.getStatusLine().getStatusCode());
 
 		} catch (URISyntaxException | IOException e) {
 			log.error("Failed to trigger job '" + job.getJobName() + "'", e);
-			return HttpStatus.INTERNAL_SERVER_ERROR.value();
+			return HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 
 	}

@@ -35,6 +35,11 @@ public class JenkinsReleaseJob extends JenkinsJob {
 	}
 
 	@Override
+	public boolean isParameterized() {
+		return true;
+	}
+	
+	@Override
 	public String getQueryString() {
 		return super.getQueryString() + "&releaseVersion=" + releaseVersion + "&developmentVersion="
 				+ developmentVersion;

@@ -34,7 +34,7 @@ public class SlashCommandParser {
 
 			String relVersion = jobParams[jobParams.length - 2];
 
-			String jobName = StringUtils.join(Arrays.copyOfRange(jobParams, 1, jobParams.length - 2)).replaceAll(
+			String jobName = StringUtils.join(Arrays.copyOfRange(jobParams, 1, jobParams.length - 2), ' ').replaceAll(
 					"\"", "");
 
 			return new JenkinsReleaseJob(jobName, buildToken, relVersion, devVersion);

@@ -48,13 +48,22 @@ public class JenkinsJob {
 		this.cause = cause;
 	}
 
+	/**
+	 * Indicates whether this Jenkins job require parameters
+	 * 
+	 * @return true if parameters need to be passed
+	 */
+	public boolean isParameterized() {
+		return false;
+	}
+
 	public String getQueryString() {
 		if (this.cause == null)
 			return "token=" + buildToken + "&delay=0sec";
 		else
 			return "token=" + buildToken + "&cause=" + cause + "&delay=0sec";
 	}
-	
+
 	@Override
 	public String toString() {
 		return getJobName() + "?" + getQueryString();
