@@ -57,7 +57,7 @@ public class SlashController {
 		if (!slackToken.equals(token))
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 
-		String buildCause = "Slash command " + command + " " + text + " on channel #" + channelName + " executed by "
+		String buildCause = "Slash command " + command + " on channel #" + channelName + " executed by "
 				+ userName + "@" + teamDomain;
 
 		JenkinsJob job = commandParser.parse(text);
