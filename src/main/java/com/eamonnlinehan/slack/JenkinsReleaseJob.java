@@ -41,7 +41,7 @@ public class JenkinsReleaseJob extends JenkinsJob {
 	
 	@Override
 	public String getQueryString() {
-		return super.getQueryString() + "&releaseVersion=" + releaseVersion + "&developmentVersion="
+		return super.getQueryString() + "&serverName=" + releaseVersion + "&domainName="
 				+ developmentVersion;
 	}
 
